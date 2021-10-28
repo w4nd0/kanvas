@@ -6,11 +6,21 @@ from rest_framework.views import APIView
 from .models import Courses
 from .serializer import CoursesSerializer
 
-class CourseCreateView(APIView):
-    ...
+class CourseView(APIView):
+    def get(self, request):
+        ...
 
-class CourseUpdateView(APIView):
-    ...
+class CreateCourseView(APIView):
+    def post(self, request):
+        ...
+
+class CourseRetriveView(APIView):
+    def put(self, request):
+        ...
+
+    def delete(self, request):
+        ...
 
 class CourseRegistrationsView(APIView):
-    ...
+    def put(self, request):
+        ...
