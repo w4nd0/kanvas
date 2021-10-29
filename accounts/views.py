@@ -1,32 +1,34 @@
 # from django.contrib.auth.models import User
-from rest_framework.views import APIView
-from rest_framework.authtoken.models import Token
-from rest_framework.authentication import TokenAuthentication
-from rest_framework.permissions import IsAuthenticated
-from django.contrib.auth import authenticate
+from django.contrib.auth import authenticate, get_user_model
+from django.db import IntegrityError
 from rest_framework import status
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.authtoken.models import Token
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from django.contrib.auth import get_user_model
+from rest_framework.views import APIView
+
+from .serializer import UserSerializer
 
 User = get_user_model()
 
 class UserCreateView(APIView):
   def post(self, request):
-    username = request.data['username']
-    password = request.data['password']
+    try:
+      user = User.objects.create_user(**request.data)
+
+      serializer = UserSerializer(user)
+
+      return Response(serializer.data, status=status.HTTP_201_CREATED)
     
-    User.objects.create_user(**request.data)
-
-    return Response({'msg':'ok'})
-
+    except IntegrityError:
+        return Response({'error':'already registered user'}, status=status.HTTP_409_CONFLICT)
+        
 class LoginView(APIView):
   def post(self, request):
 
-    username = request.data['username']
-    password = request.data['password']
+    user = authenticate(**request.data)
 
-    user = authenticate(username=username, password=password)
-    print(user)
     if user:
         token = Token.objects.get_or_create(user=user)[0]
 
