@@ -1,4 +1,4 @@
-from django.contrib.auth.models import User
+# from django.contrib.auth.models import User
 from rest_framework.views import APIView
 from rest_framework.authtoken.models import Token
 from rest_framework.authentication import TokenAuthentication
@@ -6,13 +6,16 @@ from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth import authenticate
 from rest_framework import status
 from rest_framework.response import Response
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 class UserCreateView(APIView):
   def post(self, request):
     username = request.data['username']
     password = request.data['password']
     
-    User.objects.create_user(username=username, password=password)
+    User.objects.create_user(**request.data)
 
     return Response({'msg':'ok'})
 
