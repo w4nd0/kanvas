@@ -13,16 +13,18 @@ class ActivitiesView(APIView):
 
     def post(self, request):
         ...
-    
+
     def get(self, request):
         ...
-    
+
+
 class ActivitiesUpdateView(APIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated, SpecificFacilitador]
 
     def put(self, request, activity_id):
         ...
+
 
 class SubmissionNoteView(APIView):
     authentication_classes = [TokenAuthentication]
@@ -31,13 +33,15 @@ class SubmissionNoteView(APIView):
     def put(self, request, submission_id):
         ...
 
+
 class ActivitiesSubmitView(APIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated, SpecificEstudante]
 
-    def post(self, request,activity_id):
+    def post(self, request, activity_id):
         ...
-    
+
+
 class SubmissionView(APIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated, SpecificEstudante]
