@@ -6,7 +6,7 @@ from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from .exc.activities_exception import ActivityAlreadySubmitted, ActivityHasSubmissions
+from .exc.activities_exception import ActivityHasSubmissions
 
 from .models import Activities, Submissions
 from .serializer import ActiviesSerializer, SubmissionsSerializer
@@ -51,7 +51,7 @@ class ActivitiesUpdateView(APIView):
     def put(self, request, activity_id):
         try:
             activity = Activities.objects.filter(id=activity_id)
-            
+
             if bool(activity.get(id=activity_id).submissions.count()):
                 raise ActivityHasSubmissions
             
@@ -91,10 +91,6 @@ class ActivitiesSubmitView(APIView):
 
     def post(self, request, activity_id):
         try:
-            activity = Activities.objects.get(id=activity_id)
-            if bool(activity.submissions.filter(user_id=request.user.id)):
-                raise ActivityAlreadySubmitted
-
             new_submission = {
                 "repo": request.data["repo"],
                 "user_id": request.user.id,
@@ -106,10 +102,7 @@ class ActivitiesSubmitView(APIView):
             serializer = SubmissionsSerializer(submission)
 
             return Response(serializer.data, status=status.HTTP_201_CREATED)
-
-        except ActivityAlreadySubmitted:
-            return Response({"error": "Student has already submitted the activity."})
-
+        
         except ObjectDoesNotExist:
             return Response(
                 {"error": "Activity not found"},

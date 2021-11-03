@@ -33,7 +33,7 @@ class CourseView(APIView):
         except IntegrityError:
             return Response(
                 {"error": "Course with this name already exists"},
-                status=status.HTTP_409_CONFLICT,
+                status=status.HTTP_400_BAD_REQUEST,
             )
 
         except KeyError:
@@ -75,7 +75,7 @@ class CourseRetriveView(APIView):
         except IntegrityError:
             return Response(
                 {"error": "Course with this name already exists"},
-                status=status.HTTP_409_CONFLICT,
+                status=status.HTTP_400_BAD_REQUEST,
             )
 
         except ObjectDoesNotExist:
@@ -131,17 +131,15 @@ class CourseRegistrationsView(APIView):
             course = Courses.objects.get(id=course_id)
 
             serializer = CoursesSerializer(course)
-
             return Response(serializer.data, status=status.HTTP_200_OK)
 
         except ObjectDoesNotExist:
             return Response(
-                {"error": "invalid course_id."},
+                {"errors": "invalid course_id"},
                 status=status.HTTP_404_NOT_FOUND,
             )
 
         except KeyError as e:
-            print(e)
             return Response(
                 {"error": "invalid key."},
                 status=status.HTTP_400_BAD_REQUEST,
