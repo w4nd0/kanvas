@@ -1,7 +1,7 @@
 # Kanvas 📔
-O Kanvas é uma sistema de gerencia de uma plataforma de ensino, com o intuito de auxiliar e agilizar as tarefas mais comuns em um ambiente academico.
+Kanvas é uma sistema de gerenciamento para plataformas de ensino, com o intuito de auxiliar e agilizar as tarefas mais comuns em um ambiente acadêmico.
 
-Ao utilizar esta API, deve ser possível criar, ler e atualiazar informações de usuários, cursos, atividades e submissões.
+Ao utilizar esta API, deve ser possível criar, ler e atualistudieszar informações sobre usuários, cursos, atividades e submissões.
 
 ## Como instalar e rodar? 🚀
 Para instalar o sistema, é necessário seguir alguns passos, como baixar o projeto e fazer instalação das dependências. Para isso, é necessário abrir uma aba do terminal e digitar o seguinte:
@@ -38,7 +38,7 @@ E o sistema estará rodando em http://127.0.0.1:8000/
 ## Utilização 🖥️
 Para utilizar este sistema, é necessário utilizar um API Client, como o [Insomnia](https://insomnia.rest/download)
 
-### Rotas
+### Rotas 🔄
 
 **POST /api/accounts/**
 
@@ -94,7 +94,7 @@ Response:
 }   
 ```
 
-**POST /api/courses/**  (somente instrutor)
+**POST /api/courses/**  🔑(somente instrutor)
 
 Rota para criar um curso.
 
@@ -118,7 +118,8 @@ Response:
 }   
 ```
 
-**PUT /api/courses/\<int:course_id>/**  (somente instrutor)
+**PUT /api/courses/\<int:course_id>/**  
+🔑(somente instrutor)
 
 Rota para atualizar um curso, a partir do seu id
 
@@ -142,7 +143,8 @@ Response:
 }   
 ```
 
-**PUT /api/courses/\<int:course_id>/registrations/** (somente instrutor)
+**PUT /api/courses/\<int:course_id>/registrations/**\
+🔑(somente instrutor)
 
 Rota para atualizar a lista de estudantes matriculados em um curso.\
 *Somente estudantes são aceitos.
@@ -234,14 +236,16 @@ Response:
 }
 ```
 
-**DELETE /api/courses/\<int:course_id>/** (somente instrutor)
+**DELETE /api/courses/\<int:course_id>/**\
+🔑(somente instrutor)
 
 Rota para deletar um curso.
 
 `RESPONSE STATUS -> HTTP 204 (no content)`
 
 
-**POST /api/activities/** (somente instrutor ou facilitador)
+**POST /api/activities/**\
+ 🔑(somente instrutor ou facilitador)
 
 Rota para criar uma atividade.
 
@@ -267,7 +271,8 @@ Response:
 } 
 ```
 
-**GET /api/activities/** (somente instrutor ou facilitador)
+**GET /api/activities/**\
+🔑(somente instrutor ou facilitador)
 
 Rota para listar as atividades.
 
@@ -309,7 +314,8 @@ Response:
 ]
 ```
 
-**PUT /api/activities/\<int:activity_id>/** (somente instrutor ou facilitador)
+**PUT /api/activities/\<int:activity_id>/**\
+🔑(somente instrutor ou facilitador)
 
 Rota para atualizar uma atividade.\
 *A atividade não pode ter submissões.
@@ -336,7 +342,8 @@ Response:
 } 
 ```
 
-**POST /api/activities/\<int:activity_id>/submissions/** (somente estudante)
+**POST /api/activities/\<int:activity_id>/submissions/**\
+🔑(somente estudante)
 
 Rota para um estudante enviar uma submissão para uma atividade.
 
@@ -362,7 +369,8 @@ Response:
 } 
 ```
 
-**PUT /api/submissions/\<int:submission_id>/** (somente instrutor ou facilitador)
+**PUT /api/submissions/\<int:submission_id>/**\
+🔑(somente instrutor ou facilitador)
 
 Rota para lançar a nota para uma submissão de um estudante.
 
@@ -388,7 +396,8 @@ Response:
 }
 ```
 
-**GET /api/submissions/** (somente usuários autentificados)
+**GET /api/submissions/**\
+🔑(somente usuários autentificados)
 
 Rota para listar as submissões.\
 *Se o usuário for um estudante, retorna somente suas submissões.

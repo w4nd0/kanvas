@@ -23,4 +23,4 @@ class SpecificFacilitador(BasePermission):
 
 class SpecificEstudante(BasePermission):
     def has_permission(self, request, view):
-        return bool(not request.user.is_staff and not request.user.is_superuser)
+        return bool(request.user and request.user.is_authenticated) and bool(not request.user.is_staff and not request.user.is_superuser)
