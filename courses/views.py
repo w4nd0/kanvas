@@ -36,6 +36,12 @@ class CourseView(APIView):
                 status=status.HTTP_409_CONFLICT,
             )
 
+        except KeyError:
+            return Response(
+                {"error": "Invalid key"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
 
 class CourseRetriveView(APIView):
     authentication_classes = [TokenAuthentication]

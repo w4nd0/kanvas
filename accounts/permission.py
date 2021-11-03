@@ -6,10 +6,12 @@ class SpecificInstrutor(BasePermission):
         request_method = view.request._request.__dict__["environ"]["REQUEST_METHOD"]
 
         route = view.request._request.get_full_path_info()[:13]
-        return bool(
+
+        return (
             bool(request.user.is_superuser)
             and bool(request.user and request.user.is_authenticated)
-        ) or (request_method == "GET" and route == "/api/courses/")
+            or (request_method == "GET" and route == "/api/courses/")
+        )
 
 
 class SpecificFacilitador(BasePermission):
@@ -17,3 +19,8 @@ class SpecificFacilitador(BasePermission):
         return bool(request.user.is_staff) and bool(
             request.user and request.user.is_authenticated
         )
+
+
+class SpecificEstudante(BasePermission):
+    def has_permission(self, request, view):
+        return bool(not request.user.is_staff and not request.user.is_superuser)
