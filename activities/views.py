@@ -6,6 +6,7 @@ from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from .exc.activities_exception import ActivityAlreadySubmitted, ActivityHasSubmissions
 
 from .models import Activities, Submissions
 from .serializer import ActiviesSerializer, SubmissionsSerializer
@@ -26,7 +27,7 @@ class ActivitiesView(APIView):
         except IntegrityError:
             return Response(
                 {"error": "Activity with this name already exists"},
-                status=status.HTTP_409_CONFLICT,
+                status=status.HTTP_400_BAD_REQUEST,
             )
 
         except KeyError:
@@ -49,18 +50,26 @@ class ActivitiesUpdateView(APIView):
 
     def put(self, request, activity_id):
         try:
-            Activities.objects.filter(id=activity_id).update(**request.data)
+            activity = Activities.objects.filter(id=activity_id)
+            
+            if bool(activity.get(id=activity_id).submissions.count()):
+                raise ActivityHasSubmissions
+            
+            activity.update(**request.data)
 
-            activities = Activities.objects.get(id=activity_id)
-
-            serializer = ActiviesSerializer(activities)
+            serializer = ActiviesSerializer(activity.get(id=activity_id))
 
             return Response(serializer.data, status=status.HTTP_200_OK)
-
+        
+        except ActivityHasSubmissions:
+            return Response(
+                {"error":'You can not change an Activity with submissions'},
+                status=status.HTTP_400_BAD_REQUEST,
+            ) 
         except IntegrityError:
             return Response(
                 {"error": "Activity with this name already exists"},
-                status=status.HTTP_409_CONFLICT,
+                status=status.HTTP_400_BAD_REQUEST
             )
 
         except ObjectDoesNotExist:
@@ -82,6 +91,10 @@ class ActivitiesSubmitView(APIView):
 
     def post(self, request, activity_id):
         try:
+            activity = Activities.objects.get(id=activity_id)
+            if bool(activity.submissions.filter(user_id=request.user.id)):
+                raise ActivityAlreadySubmitted
+
             new_submission = {
                 "repo": request.data["repo"],
                 "user_id": request.user.id,
@@ -93,9 +106,21 @@ class ActivitiesSubmitView(APIView):
             serializer = SubmissionsSerializer(submission)
 
             return Response(serializer.data, status=status.HTTP_201_CREATED)
-        except:
-            return Response({"msg": "ok"})
 
+        except ActivityAlreadySubmitted:
+            return Response({"error": "Student has already submitted the activity."})
+
+        except ObjectDoesNotExist:
+            return Response(
+                {"error": "Activity not found"},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
+        except KeyError:
+            return Response(
+                {"error": "Invalid key"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
 
 class SubmissionNoteView(APIView):
     authentication_classes = [TokenAuthentication]

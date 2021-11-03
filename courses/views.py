@@ -48,11 +48,19 @@ class CourseRetriveView(APIView):
     permission_classes = [SpecificInstrutor]
 
     def get(self, request, course_id):
-        course = Courses.objects.get(id=course_id)
+        try:
+            course = Courses.objects.get(id=course_id)
 
-        serializer = CoursesSerializer(course)
+            serializer = CoursesSerializer(course)
 
-        return Response(serializer.data, status=status.HTTP_200_OK)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        
+        except ObjectDoesNotExist:
+            return Response(
+                {'errors': 'invalid course_id'},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
 
     def put(self, request, course_id):
         try:
@@ -72,7 +80,7 @@ class CourseRetriveView(APIView):
 
         except ObjectDoesNotExist:
             return Response(
-                {"error": "Course not found"},
+                {'errors': 'invalid course_id'},
                 status=status.HTTP_404_NOT_FOUND,
             )
 
