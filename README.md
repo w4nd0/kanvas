@@ -7,7 +7,7 @@ Ao utilizar esta API, deve ser possível criar, ler e atualistudieszar informaç
 Para instalar o sistema, é necessário seguir alguns passos, como baixar o projeto e fazer instalação das dependências. Para isso, é necessário abrir uma aba do terminal e digitar o seguinte:
 ```
 # Aqui é como devemos clonar o repositório
-git clone https://gitlab.com/trevius/kanvas
+git clone git@github.com:w4nd0/kanvas.git
 ```
 Depois que terminar de baixar, é necessário entrar na pasta, criar um ambiente virtual e entrar nele:
 ```
